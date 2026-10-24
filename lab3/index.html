@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abhinandana Bhatta | Portfolio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }
+    .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+    header { text-align: center; padding: 3rem 0; animation: fadeIn 1s ease; }
+    h1 { font-size: 3rem; color: #2c3e50; margin-bottom: 0.5rem; }
+    .subtitle { font-size: 1.5rem; color: #7f8c8d; margin-bottom: 1rem; }
+    .tagline { font-size: 1.2rem; color: #3498db; font-weight: 500; }
+    .card { background: white; border-radius: 15px; padding: 2rem; margin: 1.5rem 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
+    .card h2 { color: #2c3e50; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .icon { font-size: 1.5rem; }
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .info-item { padding: 1rem; background: #f8f9fa; border-radius: 10px; }
+    .info-label { font-size: 0.85rem; color: #95a5a6; text-transform: uppercase; letter-spacing: 1px; }
+    .info-value { font-size: 1.1rem; color: #2c3e50; font-weight: 500; margin-top: 0.3rem; }
+    .hobbies { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .hobby-tag { background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 0.5rem 1rem; border-radius: 25px; font-size: 0.9rem; }
+    .dosa { background: linear-gradient(135deg, #e67e22, #d35400); }
+    footer { text-align: center; padding: 2rem; color: #7f8c8d; font-size: 0.9rem; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 600px) { h1 { font-size: 2rem; } .subtitle { font-size: 1.2rem; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Abhinandana Bhatta</h1>
+      <p class="subtitle">3rd Year CSE Student</p>
+      <p class="tagline">JIT Davanagere</p>
+    </header>
+
+    <div class="card">
+      <h2><span class="icon">👨‍💻</span> About Me</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Program</div>
+          <div class="info-value">B.Tech Computer Science</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Year</div>
+          <div class="info-value">3rd Year</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">College</div>
+          <div class="info-value">JIT Davanagere</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">❤️</span> Favorites</h2>
+      <div class="hobbies">
+        <span class="hobby-tag dosa">Masala Dosa</span>
+        <span class="hobby-tag">Exploring New Places</span>
+        <span class="hobby-tag">Creating Projects</span>
+        <span class="hobby-tag">Learning Tech</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon">🚀</span> Interests</h2>
+      <p style="color: #555;">I love exploring new technologies and building creative projects. Whether it's trying out a new framework or discovering a hidden café, I'm always up for an adventure!</p>
+    </div>
+
+    <footer>
+      <p>Made with ❤️ by Abhinandana Bhatta</p>
+    </footer>
+  </div>
+
+  <script>
+    document.querySelectorAll('.card').forEach((card, i) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, 200 + i * 150);
+    });
+
+    document.querySelectorAll('.hobby-tag').forEach(tag => {
+      tag.addEventListener('mouseenter', () => tag.style.transform = 'scale(1.05)');
+      tag.addEventListener('mouseleave', () => tag.style.transform = 'scale(1)');
+    });
+  </script>
+</body>
+</html>

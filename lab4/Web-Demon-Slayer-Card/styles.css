@@ -1,0 +1,837 @@
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower');
+@import url('https://fonts.googleapis.com/css?family=Amatic+SC');
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* =========================================
+   BODY — ANIMATED GLASS-MORPHISM BACKGROUND
+   ========================================= */
+
+body {
+    font-family: 'Indie Flower', cursive;
+
+    background:
+        radial-gradient(circle at 20% 20%, rgba(180, 60, 80, 0.35), transparent 45%),
+        radial-gradient(circle at 80% 75%, rgba(140, 40, 60, 0.30), transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(120, 30, 50, 0.25), transparent 60%),
+        linear-gradient(135deg, #5c0d16, #7a1622, #4a0b14, #6b1220, #5c0d16);
+    background-size: 200% 200%, 200% 200%, 200% 200%, 400% 400%;
+    animation: bgShift 32s ease-in-out infinite,
+               bgPulse 18s ease-in-out infinite alternate;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    overscroll-behavior: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: -10%;
+    background:
+        radial-gradient(circle at 15% 25%, rgba(255, 200, 180, 0.10), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(255, 220, 190, 0.07), transparent 45%),
+        radial-gradient(circle at 25% 85%, rgba(255, 190, 200, 0.08), transparent 45%),
+        radial-gradient(circle at 75% 80%, rgba(255, 210, 180, 0.06), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(40px);
+    animation: glowDrift 26s ease-in-out infinite alternate;
+}
+
+@keyframes bgShift {
+    0%   { background-position: 0% 50%, 0% 50%, 0% 50%, 0% 50%; }
+    50%  { background-position: 100% 50%, 100% 50%, 100% 50%, 100% 50%; }
+    100% { background-position: 0% 50%, 0% 50%, 0% 50%, 0% 50%; }
+}
+
+@keyframes bgPulse {
+    0%   { filter: brightness(0.98) saturate(1); }
+    100% { filter: brightness(1.06) saturate(1.08); }
+}
+
+@keyframes glowDrift {
+    0%   { transform: translate(0, 0) scale(1);       opacity: 0.85; }
+    50%  { transform: translate(2%, -1%) scale(1.05); opacity: 1; }
+    100% { transform: translate(-2%, 1%) scale(1.02); opacity: 0.9; }
+}
+
+/* ==========================
+   BOOK & LEAF
+   ========================== */
+
+.book {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 400px;
+    transform: translate(-50%, -50%);
+    transition: transform 0.9s ease-in-out;
+    perspective: 2200px;
+    perspective-origin: 50% 50%;
+    z-index: 2;
+}
+.book.open { transform: translate(-50%, -50%) translateX(150px); }
+
+.leaf {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 0.9s ease-in-out;
+    cursor: pointer;
+    will-change: transform;
+}
+.leaf.flipped { transform: rotateY(-180deg); }
+
+.leaf .face {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+}
+.leaf .face.back { transform: rotateY(180deg); }
+
+.cover-face {
+    background: #7c1418;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+}
+.cover-face img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    pointer-events: none;
+}
+
+/* ==========================
+   INSIDE PAGE
+   ========================== */
+
+.details {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    padding: 18px;
+    text-align: center;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.55), transparent 70%),
+        linear-gradient(135deg, #fff8e4, #ecd59b);
+}
+.details::before {
+    content: '';
+    position: absolute;
+    top: 10px; left: 10px; right: 10px; bottom: 10px;
+    border: 1px solid #c39a43;
+    pointer-events: none;
+}
+.face.front .details { box-shadow: inset 30px 0 40px -25px rgba(80, 40, 0, 0.4); }
+.face.back  .details { box-shadow: inset 30px 0 40px -25px rgba(80, 40, 0, 0.4); }
+
+/* =========================================
+   ಸಭಾ ಕಾರ್ಯಕ್ರಮ PAGE — fills the whole card
+   ========================================= */
+
+.details:has(.person-list) {
+    display: flex;
+    flex-direction: column;
+    padding-top: 24px;
+    padding-bottom: 20px;
+}
+
+.person-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 6px 0;
+}
+
+.person-list .person-row {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.person-list .person-row .person-photo {
+    width: 76px;
+    height: 76px;
+    border-width: 2px;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(120, 60, 0, 0.2);
+}
+
+.person-list .person-text span {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+.person-list .person-text b {
+    font-size: 13px;
+    line-height: 1.25;
+    margin-top: 3px;
+}
+.person-list .person-text small {
+    font-size: 8.5px;
+    line-height: 1.35;
+    margin-top: 3px;
+}
+
+/* =========================================
+   GUEST PAGES — 5 rows sized to fit the card
+   ========================================= */
+
+.details:has(.guest-list) {
+    display: flex;
+    flex-direction: column;
+    padding-top: 12px;
+    padding-bottom: 14px;
+}
+
+.details:has(.guest-list) .gold-line { margin: 3px 0; }
+.details:has(.guest-list) .section-title {
+    margin-bottom: 5px;
+    font-size: 15px;
+    padding: 2px 12px;
+}
+
+.guest-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    padding: 2px 0;
+}
+
+.guest-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+    padding-bottom: 4px;
+    margin-bottom: 0;
+    border-bottom: 1px dashed rgba(155, 113, 40, 0.4);
+    flex: 0 0 auto;
+}
+.guest-list .guest-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.guest-list .guest-row:nth-child(odd)  { flex-direction: row; }
+.guest-list .guest-row:nth-child(even) { flex-direction: row-reverse; text-align: right; }
+
+.guest-row .person-photo {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+}
+
+.guest-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.guest-text b {
+    display: block;
+    color: #541719;
+    font-size: 8.5px;
+    line-height: 1.2;
+}
+.guest-text small {
+    display: block;
+    color: #624831;
+    font-size: 6.4px;
+    line-height: 1.2;
+    margin-top: 1px;
+}
+
+/* Guests 9-10 page (with 16:9 photo) — keeps rows compact at the top */
+.details-guest-short {
+    padding-top: 14px;
+    padding-bottom: 12px;
+}
+.details-guest-short .section-title { margin-bottom: 4px; }
+.details-guest-short .guest-list {
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    padding: 2px 0;
+}
+.details-guest-short .guest-row { margin-bottom: 6px; }
+
+/* =========================================
+   Event-details page
+   ========================================= */
+
+.details:has(.event-detail) .event-detail {
+    margin: 6px 12px;
+}
+.details:has(.event-detail) .event-detail span { font-size: 9px; }
+.details:has(.event-detail) .event-detail b { font-size: 11px; margin-top: 2px; }
+.details:has(.event-detail) .event-detail small { font-size: 6.5px; margin-top: 1px; }
+.details:has(.event-detail) .welcome-large {
+    margin-top: 6px;
+    font-size: 16px;
+}
+
+/* =========================================
+   CLOSING PAGE
+   ========================================= */
+
+.details:has(.closing-photo-frame) {
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+.details:has(.closing-photo-frame) .closing-title {
+    margin-top: 2px;
+    margin-bottom: 8px;
+    font-size: 19px;
+    line-height: 1.1;
+}
+.details:has(.closing-photo-frame) .organiser-name {
+    margin-top: 10px;
+    font-size: 12px;
+}
+.details:has(.closing-photo-frame) .organiser-role {
+    font-size: 8px;
+    line-height: 1.5;
+}
+.details:has(.closing-photo-frame) .final-org {
+    margin-top: 8px;
+    font-size: 9px;
+}
+.details:has(.closing-photo-frame) .welcome-large {
+    margin-top: 14px;
+    font-size: 17px;
+}
+
+/* =========================================
+   STORY PAGES (ಕಲಾ ಪರಂಪರೆ / ಯಕ್ಷಲೋಕ)
+   ========================================= */
+
+.story-page {
+    padding: 14px 15px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+}
+
+.story-page .top-symbol  { font-size: 18px; line-height: 1; }
+.story-page .org-name    { font-size: 12px; margin: 3px 0 2px; }
+.story-page .gold-line   { margin: 3px 0; font-size: 9px; }
+.story-page .section-title {
+    font-size: 15px;
+    padding: 2px 12px;
+    margin-bottom: 5px;
+}
+
+.story-text {
+    font-family: 'Indie Flower', cursive;
+    font-size: 9px;
+    line-height: 1.55;
+    color: #3e2a1c;
+    text-align: justify;
+    text-justify: inter-word;
+    padding: 0 2px;
+    margin: 4px 0 0;
+    width: 100%;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    overflow: hidden;
+}
+
+.story-sub {
+    color: #a06d20;
+    font-family: 'Amatic SC', cursive;
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 1px;
+    margin-bottom: 5px;
+    padding: 0 6px;
+    line-height: 1.2;
+    text-align: center;
+}
+
+/* =========================================
+   CULTURAL GALLERY PAGE
+   ========================================= */
+
+.details:has(.cultural-gallery) {
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+.details:has(.cultural-gallery) .section-title {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+.details:has(.cultural-gallery) .cultural-name {
+    font-size: 13px;
+    margin-top: 4px;
+}
+.details:has(.cultural-gallery) .cultural-sub {
+    font-size: 8px;
+    margin-top: 1px;
+}
+
+.cultural-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 96%;
+    margin: 12px auto 0;
+    flex: 1;
+}
+
+.gallery-slot {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1.5px solid #c39a43;
+    background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(236,213,155,0.6));
+    box-shadow:
+        0 2px 5px rgba(120, 60, 0, 0.15),
+        inset 0 0 0 1px rgba(255,255,255,0.5);
+    position: relative;
+}
+
+.gallery-slot::after {
+    content: '❖';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(195, 154, 67, 0.4);
+    font-size: 18px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.gallery-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    pointer-events: none;
+}
+.gallery-img.visible { opacity: 1; z-index: 2; }
+
+/* ==========================
+   TEXT
+   ========================== */
+
+.top-symbol { font-family: serif; color: #8b1619; font-size: 22px; line-height: 1; }
+.org-name {
+    color: #7b1418;
+    font-family: 'Amatic SC', cursive;
+    font-size: 14px;
+    line-height: 1;
+    margin: 5px 0 2px;
+}
+.tagline { color: #69452c; font-size: 8px; }
+.gold-line { color: #a97822; margin: 6px 0; }
+.details h1 {
+    font-family: 'Amatic SC', cursive;
+    color: #8d1519;
+    font-size: 24px;
+    line-height: 0.9;
+    letter-spacing: 2px;
+    margin: 8px 0 3px;
+}
+.event-kannada { color: #a07327; font-family: 'Amatic SC', cursive; font-size: 14px; font-weight: bold; }
+.event-info { color: #523728; font-size: 7px; line-height: 1.35; margin-top: 6px; }
+.welcome { color: #80151a; font-family: 'Amatic SC', cursive; font-size: 15px; margin-top: 9px; }
+
+.section-title {
+    display: inline-block;
+    color: #851519;
+    font-family: 'Amatic SC', cursive;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 3px 16px;
+    border-top: 1px solid #b88a32;
+    border-bottom: 1px solid #b88a32;
+    margin-bottom: 12px;
+}
+
+/* ==========================
+   PERSON LIST (base)
+   ========================== */
+
+.person-list { display: flex; flex-direction: column; width: 100%; }
+
+.person-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed rgba(155, 113, 40, 0.4);
+}
+.person-list .person-row:nth-child(odd)  { flex-direction: row; }
+.person-list .person-row:nth-child(even) { flex-direction: row-reverse; text-align: right; }
+
+.person-photo {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    border: 1.5px solid #c39a43;
+    flex-shrink: 0;
+    background: #fff8e4;
+    display: block;
+    box-shadow: 0 1px 3px rgba(120, 60, 0, 0.15);
+}
+.person-row .person-photo { border: none; background: transparent; box-shadow: none; }
+
+.person-text { flex: 1; min-width: 0; }
+.person-text span { display: block; color: #a26e20; font-family: 'Amatic SC', cursive; font-size: 11px; font-weight: bold; }
+.person-text b { display: block; color: #531719; font-size: 10px; line-height: 1.15; margin-top: 1px; }
+.person-text small { display: block; color: #5b412e; font-size: 6.5px; line-height: 1.15; margin-top: 1px; }
+
+/* ==========================
+   GURU ROW
+   ========================== */
+
+.guru-row { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 4px 0 2px; }
+.guru-photo {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    border: 2px solid #c39a43;
+    background: #fff8e4;
+    display: block;
+    box-shadow: 0 2px 5px rgba(120, 60, 0, 0.2);
+}
+.guru-text { text-align: center; }
+
+/* ==========================
+   AWARD LIST
+   ========================== */
+
+.award-list { display: flex; flex-direction: column; width: 100%; }
+
+.award-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+    border-bottom: 1px dashed rgba(155, 113, 40, 0.4);
+}
+.award-list .award-row:last-child { border-bottom: none; margin-bottom: 0; }
+.award-list .award-row:nth-child(odd)  { flex-direction: row; }
+.award-list .award-row:nth-child(even) { flex-direction: row-reverse; text-align: right; }
+
+.award-photo {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    border: 1.5px solid #c39a43;
+    background: #fff8e4;
+    display: block;
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(120, 60, 0, 0.15);
+}
+.award-text { flex: 1; min-width: 0; }
+.award-text b { display: block; color: #671519; font-size: 9px; line-height: 1.15; }
+.award-text small { display: block; color: #60442e; font-size: 7px; line-height: 1.3; margin-top: 2px; }
+
+/* ==========================
+   16:9 PHOTO FRAMES
+   ========================== */
+
+.photo-frame {
+    width: 82%;
+    margin: 12px auto 0;
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid #c39a43;
+    background: #fff8e4;
+    box-shadow:
+        0 2px 6px rgba(120, 60, 0, 0.2),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+}
+
+.guest-photo-frame {
+    width: 72%;
+    margin: 10px auto 0;
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid #c39a43;
+    background: #fff8e4;
+    box-shadow:
+        0 2px 6px rgba(120, 60, 0, 0.2),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+.guest-photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+}
+
+/* ==========================
+   PAPER ARTICLE FRAME
+   ========================== */
+
+.article-frame {
+    display: inline-block;
+    margin: 8px auto;
+    padding: 3px;
+    border-radius: 6px;
+    border: 2px solid #c39a43;
+    background: #fff8e4;
+    box-shadow:
+        0 2px 8px rgba(120, 60, 0, 0.22),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+    max-width: 84%;
+    overflow: hidden;
+    vertical-align: top;
+    line-height: 0;
+}
+.article-frame img {
+    display: block;
+    max-width: 100%;
+    max-height: 240px;
+    width: auto;
+    height: auto;
+}
+
+/* ==========================
+   CLOSING PHOTO FRAME
+   ========================== */
+
+.closing-photo-frame {
+    display: inline-block;
+    margin: 8px auto 6px;
+    padding: 3px;
+    border-radius: 6px;
+    border: 2px solid #c39a43;
+    background: #fff8e4;
+    box-shadow:
+        0 2px 8px rgba(120, 60, 0, 0.22),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+    max-width: 72%;
+    overflow: hidden;
+    vertical-align: top;
+    line-height: 0;
+}
+.closing-photo-frame img {
+    display: block;
+    max-width: 100%;
+    max-height: 150px;
+    width: auto;
+    height: auto;
+}
+
+/* =========================================
+   EMBEDDED MAP — compact
+   ========================================= */
+
+.map-frame {
+    width: 78%;
+    margin: 5px auto 0;
+    height: 58px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1.5px solid #c39a43;
+    background: #fff8e4;
+    box-shadow:
+        0 1px 4px rgba(120, 60, 0, 0.18),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+.map-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+
+.event-detail.event-detail-with-map {
+    margin-bottom: 4px;
+}
+
+/* ==========================
+   CLICKABLE BLOCKS
+   ========================== */
+
+.event-detail { margin: 14px 0; text-align: center; }
+.event-detail span { display: block; color: #a06d20; font-size: 10px; font-weight: bold; }
+.event-detail b { display: block; color: #611619; font-size: 12px; margin-top: 3px; }
+.event-detail small { display: block; color: #65472e; font-size: 7px; margin-top: 2px; }
+
+.event-detail.clickable {
+    position: relative;
+    text-align: center;
+    margin: 10px 12px;
+    padding: 4px 0;
+}
+
+.event-detail.clickable span,
+.event-detail.clickable b,
+.event-detail.clickable small {
+    cursor: pointer;
+    display: inline-block;
+    transition: color 0.2s ease;
+}
+
+.event-detail.clickable span:hover,
+.event-detail.clickable span:active,
+.event-detail.clickable b:hover,
+.event-detail.clickable b:active,
+.event-detail.clickable small:hover,
+.event-detail.clickable small:active {
+    color: #8b1519;
+}
+
+.event-detail.clickable span::after {
+    content: ' ↗';
+    color: #a97822;
+    font-size: 9px;
+    opacity: 0.75;
+    font-weight: normal;
+}
+
+/* ==========================
+   MISC BLOCKS
+   ========================== */
+
+.guru-name { color: #63171a; font-size: 11px; font-weight: bold; }
+.guru-place { color: #66482e; font-size: 8px; margin-top: 2px; }
+.award-section { margin-top: 6px; }
+
+.cultural-name { color: #64171a; font-size: 13px; font-weight: bold; margin-top: 6px; }
+.cultural-sub { color: #684a30; font-size: 8px; margin-top: 2px; }
+
+.welcome-large { color: #81171b; font-family: 'Amatic SC', cursive; font-size: 19px; font-weight: bold; margin-top: 18px; }
+.closing-title { color: #7d171b; font-family: 'Amatic SC', cursive; font-size: 20px; margin-top: 12px; }
+.organiser-name { color: #5d171a; font-size: 13px; font-weight: bold; margin-top: 10px; }
+.organiser-role { color: #66482f; font-size: 8px; line-height: 1.5; }
+.final-org { color: #78171a; font-size: 9px; font-weight: bold; margin-top: 10px; }
+.final-message { color: #68482f; font-family: 'Amatic SC', cursive; font-size: 18px; line-height: 1.5; margin-top: 14px; }
+
+/* =========================================
+   MOBILE / ZOOMED VIEW
+   ========================================= */
+
+@media (max-width: 700px) {
+    body { padding: 0; }
+
+    .book {
+        width: 300px;
+        height: 400px;
+        transform: translate(-50%, -50%) scale(0.62);
+    }
+    .book.open {
+        transform: translate(-50%, -50%) scale(0.62) translateX(150px);
+    }
+
+    .map-frame {
+        width: 82%;
+        height: 48px;
+        margin-top: 4px;
+        border-width: 1.2px;
+    }
+
+    /* ಸಭಾ ಕಾರ್ಯಕ್ರಮ page — mobile */
+    .details:has(.person-list) {
+        padding-top: 18px;
+        padding-bottom: 16px;
+    }
+    .person-list .person-row .person-photo {
+        width: 58px;
+        height: 58px;
+    }
+    .person-list .person-text span  { font-size: 11px; }
+    .person-list .person-text b     { font-size: 10px; }
+    .person-list .person-text small { font-size: 7px; }
+
+    /* guest pages — mobile */
+    .details:has(.guest-list) { padding-top: 10px; padding-bottom: 12px; }
+    .guest-row { gap: 6px; padding-bottom: 3px; }
+    .guest-row .person-photo { width: 36px; height: 36px; }
+    .guest-text b     { font-size: 7.5px; }
+    .guest-text small { font-size: 5.6px; }
+
+    /* story pages — mobile */
+    .story-page { padding: 12px 13px 14px; }
+    .story-page .section-title { font-size: 14px; }
+    .story-page .top-symbol    { font-size: 16px; }
+    .story-page .org-name      { font-size: 10px; }
+
+    .story-text { font-size: 8.8px; line-height: 1.53; }
+    .story-sub  { font-size: 9px; }
+
+    /* gallery page — mobile */
+    .cultural-gallery { gap: 6px; width: 97%; margin-top: 10px; }
+}
+
+@media (max-width: 500px) {
+    .book {
+        transform: translate(-50%, -50%) scale(0.55);
+    }
+    .book.open {
+        transform: translate(-50%, -50%) scale(0.55) translateX(150px);
+    }
+}
+
+@media (max-width: 400px) {
+    .book {
+        transform: translate(-50%, -50%) scale(0.48);
+    }
+    .book.open {
+        transform: translate(-50%, -50%) scale(0.48) translateX(150px);
+    }
+}
